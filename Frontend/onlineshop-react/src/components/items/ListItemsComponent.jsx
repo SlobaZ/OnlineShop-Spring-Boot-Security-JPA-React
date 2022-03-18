@@ -8,6 +8,7 @@ class ListItemsComponent extends Component {
 
         this.state = {
             id: this.props.match.params.id,
+				shopping: {},
                 items: [],
                 itemQuantity: ''
         };
@@ -32,10 +33,10 @@ class ListItemsComponent extends Component {
         });
     }
 
-    buy(){
-        ShoppingsService.buy(this.state.id).then( res => {
+    buy(id){
+        ShoppingsService.buy(id).then( res => {
         });
-        this.props.history.push('/');
+        this.props.history.push(`/resultshopping/${id}`);
     }
 
     componentDidMount(){
@@ -43,6 +44,9 @@ class ListItemsComponent extends Component {
     }
 
     refreshItem() {
+		ShoppingsService.getShoppingById(this.state.id).then((response) => {
+            this.setState({ shopping: response.data });
+          });
         ItemsService.getAllsByShoppingId(this.state.id).then((response) => {
           this.setState({ items: response.data });
         });
@@ -50,6 +54,7 @@ class ListItemsComponent extends Component {
 
 
     render() {
+		const { shopping } = this.state;
         return (
             <div>
                 <br></br>
@@ -102,7 +107,7 @@ class ListItemsComponent extends Component {
 											<td></td>
 											<td></td>
 											<td></td>
-											<td><button onClick={ () => this.buy()} className="btn btn-danger">Buy</button></td>
+											<td><button onClick={ () => this.buy(shopping.id)} className="btn btn-danger">Buy</button></td>
 											<td></td>
 											<td></td>
 										</tr>

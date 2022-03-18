@@ -72,6 +72,33 @@ label {
   width: 300px;
 }
 
+.tableresultshopping{
+  font-size: 26px;
+  border: 1px solid black;
+}
+.tableresultshopping tr td{
+  width: 250px;
+  border: 1px solid black;
+  padding-left:10px;
+}
+
+.tableresultshoppingitems{
+  font-size: 22px;
+  border: 1px solid black;
+}
+.tableresultshoppingitems th{
+  border: 1px solid black;
+  padding-left:10px;
+}
+.tableresultshoppingitems tr td{
+  width: 190px;
+  border: 1px solid black;
+  padding-left:10px;
+}
+
+
+
+
 .profiletable{
   font-size: 18px;
 }

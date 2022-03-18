@@ -20,6 +20,7 @@ import ListShoppingsComponent from "./components/shoppings/ListShoppingsComponen
 import CreateShoppingComponent from "./components/shoppings/CreateShoppingComponent.jsx";
 import CreateItemsComponent from "./components/items/CreateItemsComponent.jsx"
 import ListItemsComponent from "./components/items/ListItemsComponent.jsx";
+import ResultShoppingComponent from "./components/items/ResultShoppingComponent.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -152,6 +153,7 @@ class App extends Component {
 	          <Route exact path="/update-shopping/:id" component={CreateShoppingComponent} />
 			  <Route exact path="/buy" component={CreateItemsComponent} />
             <Route exact path="/startshopping/:id" component={ListItemsComponent} />
+            <Route exact path="/resultshopping/:id" component={ResultShoppingComponent} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />

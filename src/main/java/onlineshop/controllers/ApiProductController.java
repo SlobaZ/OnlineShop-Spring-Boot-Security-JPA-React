@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ import onlineshop.utils.AssignCategory;
 import onlineshop.dto.ProductDTO;
 
 
-//@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="http://localhost:3000")
 @RestController
 @RequestMapping(value="/api/products")
 public class ApiProductController {
