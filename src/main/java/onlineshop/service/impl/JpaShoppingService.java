@@ -27,8 +27,8 @@ public class JpaShoppingService implements ShoppingService{
 	private ItemRepository itemRepository;
 	
 	@Override
-	public Shopping getById(Integer id) {
-		return shoppingRepository.getById(id);
+	public Shopping getReferenceById(Integer id) {
+		return shoppingRepository.getReferenceById(id);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class JpaShoppingService implements ShoppingService{
 
 	@Override
 	public Shopping delete(Integer id) {
-		Shopping shopping = shoppingRepository.getById(id);
+		Shopping shopping = shoppingRepository.getReferenceById(id);
 		if(shopping != null) {
 			shoppingRepository.delete(shopping);
 		}
@@ -82,7 +82,7 @@ public class JpaShoppingService implements ShoppingService{
 	
 	@Override
 	public Shopping buy(Integer id) {
-		Shopping shopping = shoppingRepository.getById(id);
+		Shopping shopping = shoppingRepository.getReferenceById(id);
 		List<Item> items = itemRepository.findByIdShopping(id);
 		Double	x = 0.0 ;
 		for (Item item: items) {

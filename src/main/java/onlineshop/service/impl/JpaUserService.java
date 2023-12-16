@@ -29,8 +29,8 @@ public class JpaUserService implements UserService {
 	}
 
 	@Override
-	public User getById(Long id) {
-		return userRepository.getById(id);
+	public User getReferenceById(Long id) {
+		return userRepository.getReferenceById(id);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class JpaUserService implements UserService {
 
 	@Override
 	public User delete(Long id) {
-		User user = userRepository.getById(id);
+		User user = userRepository.getReferenceById(id);
 		if(user != null) {
 			userRepository.delete(user);
 		}

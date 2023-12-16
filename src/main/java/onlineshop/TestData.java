@@ -1,8 +1,9 @@
 package onlineshop;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import onlineshop.models.Role;
@@ -39,6 +40,8 @@ public class TestData {
 	@Autowired
 	private ItemService itemService;
 	
+	@Autowired
+	PasswordEncoder encoder;
 	
 
 	
@@ -55,23 +58,24 @@ public class TestData {
 		role2.setName(ERole.ROLE_USER);
 		role2 = roleRepository.save(role2);
 		
+		
 		User user1 = new User();
 		user1.setUsername("Admin");
 		user1.setEmail("admin@gmail.com");
-		user1.setPassword("$2a$10$hKDVYxLefVHV/vtuPhWD3OigtRyOykRLDdUAp80Z1crSoS1lFqaFS");    // admin
+		user1.setPassword(encoder.encode("admin"));
 		user1 = userService.save(user1);
 		
 		User user2 = new User();
 		user2.setUsername("PeraPeric");
 		user2.setEmail("pera@gmail.com");
-		user2.setPassword("$2a$10$Locf9fRBO84ejEc/bQFEROChVsd2ixjv4M2kYX6KSLp74iacK.N3W");    // 123456
+		user2.setPassword(encoder.encode("123456"));
 		user2 = userService.save(user2);
 		
 
 		User user3 = new User();
 		user3.setUsername("VasaVasic");
 		user3.setEmail("vasa@gmail.com");
-		user3.setPassword("$2a$10$bwQVsArIQJtmkPckmfRZGOEMAGBXcHaziXIEgstc9ePsPG6sYEFK.");    // 654321
+		user3.setPassword(encoder.encode("654321"));
 		user3 = userService.save(user3);
 		
 	
@@ -82,7 +86,6 @@ public class TestData {
 		userService.save(user1);
 		userService.save(user2);
 		userService.save(user3);
-		
 		
 		Product product1 = new Product();
 		product1.setName("Television");

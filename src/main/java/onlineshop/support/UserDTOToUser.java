@@ -28,11 +28,10 @@ public class UserDTOToUser implements Converter<UserDTO, User> {
 		User user = null;
 		
 		if(dto.getId()!=null){
-			user = userService.getById(dto.getId());
+			user = userService.getReferenceById(dto.getId());
 			
 			if(user == null){
-				throw new IllegalStateException("Tried to "
-						+ "modify a non-existant User");
+				throw new IllegalStateException("Tried to modify a non-existant User");
 			}
 		}
 		else {

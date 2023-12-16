@@ -12,7 +12,7 @@ import onlineshop.models.User;
 
 public interface UserService extends UserDetailsService{
 	
-	User getById(Long id);
+	User getReferenceById(Long id);
 	List<User> findAll();
 	Page<User> findAll(int pageNum);
 	User save(User user);

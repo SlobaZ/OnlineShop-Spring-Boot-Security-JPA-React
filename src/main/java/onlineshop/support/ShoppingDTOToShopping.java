@@ -29,12 +29,12 @@ public class ShoppingDTOToShopping implements Converter<ShoppingDTO, Shopping>{
 	@Override
 	public Shopping convert(ShoppingDTO shoppingDTO) {
 		
-		User user = userService.getById(shoppingDTO.getUserId());
+		User user = userService.getReferenceById(shoppingDTO.getUserId());
 		if(user!=null) {
 		Shopping shopping = null;
 		
 		if(shoppingDTO.getId() != null){
-			shopping = shoppingService.getById(shoppingDTO.getId());
+			shopping = shoppingService.getReferenceById(shoppingDTO.getId());
 
 		}
 		else {
@@ -43,14 +43,14 @@ public class ShoppingDTOToShopping implements Converter<ShoppingDTO, Shopping>{
 					
 			shopping.setId(shoppingDTO.getId());
 			shopping.setCode(shoppingDTO.getCode());
-			shopping.setTotalPrice(0.0);
-			if(shoppingDTO.getDateTimeT()==null) {
+			shopping.setTotalPrice(shoppingDTO.getTotalPrice());
+			if(shoppingDTO.getDateTime()==null) {
+				shopping.setDateTime(AuxiliaryClass.ConvertSqlDateAndTimeToString(AuxiliaryClass.EntriesPresentDateAndTimeSql()));
 				shopping.setDateTimeT(AuxiliaryClass.EntriesPresentDateAndTimeSql());
-				shopping.setDateTime(AuxiliaryClass.ViewsTextualDateTime(AuxiliaryClass.EntriesPresentDateAndTimeSql()));
 			}
-			if(shoppingDTO.getDateTimeT()!=null) {
-				shopping.setDateTimeT(AuxiliaryClass.ConvertStringToSqlDateAndTime(shoppingDTO.getDateTime()));
+			if(shoppingDTO.getDateTime()!=null) {
 				shopping.setDateTime(shoppingDTO.getDateTime());
+				shopping.setDateTimeT(AuxiliaryClass.ConvertStringToSqlDateAndTime(shoppingDTO.getDateTime()));
 			}
 			shopping.setUser(user);
 			return shopping;

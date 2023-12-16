@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +30,13 @@ import onlineshop.payload.response.MessageResponse;
 import onlineshop.repository.RoleRepository;
 import onlineshop.security.jwt.JwtUtils;
 import onlineshop.service.UserService;
+import onlineshop.utils.PasswordContainsLowercaseUppercaseSpecialCharacterDigit;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
+	
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -65,32 +67,27 @@ public class AuthenticationController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles));
+		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 	}
 	
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		
 		if (userService.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
 		}
 
 		if (userService.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+		}
+		
+		if (!PasswordContainsLowercaseUppercaseSpecialCharacterDigit.passwordContainsLowercaseUppercaseSpecialCharacterDigit(signUpRequest.getPassword())) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Password must have atleast one: digit, uppercase character, lowercase character and specail character !"));
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUsername(),  signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();

@@ -1,0 +1,55 @@
+:root {
+    --backgroundColor: white;
+    --backgroundColorLight: white;
+    --backgroundColorDark: #000000;
+  
+    --colorFont: black;
+    --colorFontLight: black;
+    --colorFontDark: aliceblue;
+  
+    --boxshadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2), 0 10px 24px 0 rgba(0, 0, 0, 0.19);
+    --boxshadowLight: 0 8px 12px 0 rgba(0, 0, 0, 0.2), 0 10px 24px 0 rgba(0, 0, 0, 0.19);
+    --boxshadowDark: 0 10px 20px 0 #383838, 0 12px 26px 0 #383838;
+  
+    --backgroundBoxcardColor: #f7f7f799;
+    --backgroundBoxcardColorLight: #f7f7f799;
+    --backgroundBoxcardColorDark: #000000;
+  
+  }
+  
+  
+  /*  DESKTOP  */
+
+.boxcardLoginRegister {
+    border: 1px solid #B0B0B0CC;
+    border-radius: 5px;
+    padding: 20px 40px;
+    color: var(--colorFont);
+    background-color: var(--backgroundBoxcardColor);
+  }
+  .boxcardLoginRegister:hover {
+    box-shadow: var(--boxshadow);
+    transform: translateY(2px);
+  }
+  .boxcardLoginRegister img {
+    width:60%;
+    margin-left:20%;
+    border-radius: 50%;
+    border: 1px solid gray;
+  }
+
+
+
+
+/*  MOBIL  */
+@media screen and (max-width: 767px) {}
+
+
+
+ @media screen and (min-width: 1600px) {
+    .boxcardLoginRegister {
+        margin-top: 1%;
+      	margin-left: 10%;
+      	margin-right: 10%;
+    }
+  }

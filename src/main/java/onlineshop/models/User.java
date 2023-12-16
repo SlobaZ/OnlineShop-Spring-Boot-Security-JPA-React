@@ -8,10 +8,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,17 +31,17 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Size(max = 20)
+	@NotEmpty(message = "Please provide a username")
+	@Size(min=5, max=100, message = "Username must be between 5 and 100 character")
 	private String username;
 
-	@NotBlank
-	@Size(max = 50)
+	@NotBlank(message = "Please provide a e-mail")
+	@Size(max=100)
 	@Email
 	private String email;
 
-	@NotBlank
-	@Size(max = 120)
+	@NotEmpty(message = "Please provide a password")
+	@Size(min=6, max=100, message = "Password must be between 6 and 100 character")
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)

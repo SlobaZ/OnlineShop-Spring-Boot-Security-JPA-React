@@ -1,0 +1,195 @@
+:root {
+    --backgroundColor: white;
+    --backgroundColorLight: white;
+    --backgroundColorDark: #000000;
+  
+    --colorFont: black;
+    --colorFontLight: black;
+    --colorFontDark: aliceblue;
+  
+    --boxshadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2), 0 10px 24px 0 rgba(0, 0, 0, 0.19);
+    --boxshadowLight: 0 8px 12px 0 rgba(0, 0, 0, 0.2), 0 10px 24px 0 rgba(0, 0, 0, 0.19);
+    --boxshadowDark: 0 10px 20px 0 #383838, 0 12px 26px 0 #383838;
+  
+    --backgroundBoxcardColor: #f7f7f799;
+    --backgroundBoxcardColorLight: #f7f7f799;
+    --backgroundBoxcardColorDark: #000000;
+  
+  }
+
+/*  DESKTOP  */
+
+.ListFormBoxDiv {
+    width: 99.5%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    color: var(--colorFont);
+    border: 2px solid gray;
+}
+
+.ListFormBoxDiv:hover {
+    box-shadow: var(--boxshadow);
+    transform: translateY(3px);
+}
+
+.nextBoxDiv {
+    width:16.6%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nextBoxDiv label {
+    margin-left: 1%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    font-size:1.0vw;
+}
+
+.nextBoxDiv .inputForList {
+	margin-left:2%;
+    width:58%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--backgroundColor);
+	color: var(--colorFont);
+	border: 1px solid gray;
+    box-shadow: 2px 1px #ccc;
+}
+
+input {
+    font-size:1.0vw;
+}
+
+input::placeholder {
+    font-size:1.0vw;
+}
+
+.nextBoxDiv .selectForList {
+	margin-left:2%;
+    width:58%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--backgroundColor);
+	color: var(--colorFont);
+	border: 1px solid gray;
+    box-shadow: 2px 1px #ccc;
+    text-align:center;
+    font-size:1.0vw;
+}
+
+.nextBoxDivButon {
+    width:10%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nextBoxDivButon  .btn-search {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+	margin-left:4%;
+}
+
+.boxes {
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    margin-top:5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: var(--colorFont);
+    background-color: var(--backgroundColor);
+}
+.boxes:hover {
+    box-shadow: var(--boxshadow);
+    transform: translateY(2px);
+}
+
+.createupdateP {
+	font-size:1.1vw;
+}
+
+.form-group-sm {
+	margin-top:15px;
+}
+
+.messageP {
+	font-size:0.9vw;
+	color: red;
+	background-color: aliceblue;
+}
+
+
+
+  /*  MOBILE  */
+  @media screen and (max-width: 767px) {
+    
+    .ListFormBoxDiv {
+        flex-direction: column;
+    }
+    
+    .nextBoxDiv {
+        width:100%;
+        padding: 5px 0;
+    }
+
+    .nextBoxDiv label {
+        font-size: 4.5vw;
+    }
+
+    .nextBoxDiv .inputForList {
+        justify-content: flex-end;
+        margin-left:auto;
+        margin-right: 1%;
+    }
+    
+    input {
+    font-size:4.5vw;
+	}
+	
+	input::placeholder {
+	    font-size:4.5vw;
+	}
+    
+    .nextBoxDiv .selectForList {
+        justify-content: flex-end;
+        margin-left:auto;
+        margin-right: 1%;
+        font-size:4.5vw;
+    }
+
+    .nextBoxDivButon {
+        width:100%;
+        padding: 5px 0;
+    }
+
+    .nextBoxDivButon  .btn-search {
+        justify-content: flex-end;
+        margin-left:auto;
+        margin-right: 1%;
+    }
+
+    .createupdateP {
+        font-size: 4.5vw;
+    }
+    
+    .messageP {
+		font-size:4.2vw;
+	}
+
+  }
