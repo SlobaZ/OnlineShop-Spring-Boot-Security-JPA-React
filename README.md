@@ -1,17 +1,15 @@
 # OnlineShop-Spring-Boot-Security-JPA-React
 
-Spring Boot 2.6.2.RELEASE
+Spring Boot 3.2.0 RELEASE
 
-Spring data JPA 2.6.2.RELEASE
+Spring data JPA 3.2.0 RELEASE
 
-Spring Boot Security 2.6.2.RELEASE
+Spring Boot Security 3.2.0 RELEASE
 
 MySQL 8.0.21
 
-Maven 3.8.0
+JDK 21
 
-JDK 11
-
-Eclipse 2019-12
+Eclipse 2023-09
 
 Reactjs 18.2.0
