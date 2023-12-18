@@ -40,7 +40,7 @@ public class JpaUserService implements UserService {
 
 	@Override
 	public Page<User> findAll(int pageNum) {
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 30);
 		return userRepository.findAll(pageable);
 	}
 

@@ -132,8 +132,8 @@ public class ApiProductController {
 	ResponseEntity<ProductDTO> updateProduct( @PathVariable Integer id, @Valid @RequestBody ProductDTO productDTO){
 		
 		try {
-				if(productDTO==null){
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				if(productDTO==null || id==null){
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				}
 				productDTO.setId(id);
 				Product persisted = productService.save(toProduct.convert(productDTO));

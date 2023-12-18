@@ -5,7 +5,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -25,16 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import onlineshop.models.Shopping;
-import onlineshop.models.Product;
-import onlineshop.models.Item;
-import onlineshop.models.User;
 import onlineshop.service.ShoppingService;
-import onlineshop.service.ProductService;
-import onlineshop.service.ItemService;
-import onlineshop.service.UserService;
 import onlineshop.support.ShoppingDTOToShopping;
 import onlineshop.support.ShoppingToShoppingDTO;
-import onlineshop.utils.AuxiliaryClass;
 import onlineshop.dto.ShoppingDTO;
 
 @CrossOrigin(origins="http://localhost:3000")
@@ -51,15 +43,6 @@ public class ApiShoppingController {
 	@Autowired
 	private ShoppingDTOToShopping toShopping;
 	 	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private ProductService productService;
-	
-	@Autowired
-	private ItemService itemService;
-
 		
 
 	@GetMapping()
@@ -122,7 +105,7 @@ public class ApiShoppingController {
 	public ResponseEntity<ShoppingDTO> editShopping(@PathVariable Integer id , @Valid @RequestBody ShoppingDTO shoppingDTO ){
 		
 		try {
-			if(shoppingDTO==null){
+			if(shoppingDTO==null || id==null){
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			}
 			shoppingDTO.setId(id);
@@ -147,30 +130,12 @@ public class ApiShoppingController {
 	@PostMapping()
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<ShoppingDTO> createShopping(){ 
-		try {		
-			User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			String username = String.valueOf ( userDetails.getUsername() );
-			User user = userService.findbyUsername(username);
-	
-			Shopping shopping = new Shopping();
-			shopping.setCode(AuxiliaryClass.AssignCode());
-			shopping.setDateTimeT(AuxiliaryClass.EntriesPresentDateAndTimeSql());
-			shopping.setDateTime(AuxiliaryClass.ConvertSqlDateAndTimeToString(AuxiliaryClass.EntriesPresentDateAndTimeSql()));
-			shopping.setTotalPrice(0.0);
-			shopping.setUser(user);
-			shoppingService.save(shopping);
-			
-			List<Product> products = productService.findAll();
-			for(Product product:products) {
-				Item item = new Item();
-				item.setItemQuantity(0);
-				item.setItemPrice(0.0);
-				item.setProduct(product);
-				itemService.save(item);
-				shopping.addItem(item);
-			}
-			shoppingService.save(shopping);
-			return new ResponseEntity<>( toDTO.convert(shopping), HttpStatus.CREATED); 
+		try {	
+				Shopping shopping  = shoppingService.createShopping();
+				if(shopping==null) {
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
+				return new ResponseEntity<>( toDTO.convert(shopping), HttpStatus.OK);
 		}
 		catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

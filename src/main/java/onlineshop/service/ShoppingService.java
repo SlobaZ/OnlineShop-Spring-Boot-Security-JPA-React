@@ -26,6 +26,7 @@ public interface ShoppingService {
 			 int pageNum);
 
 	
+	Shopping createShopping();
 	Shopping buy(Integer id);
 
 

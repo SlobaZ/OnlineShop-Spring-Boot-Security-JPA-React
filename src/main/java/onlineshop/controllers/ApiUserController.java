@@ -145,11 +145,12 @@ public class ApiUserController {
 	public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid  @RequestBody UserDTO userDTO ){
 		
 		try {
-			if(userDTO==null){
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			if(userDTO==null || id==null){
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 
 			User persisted = userService.getReferenceById(id);
+			
 			if(persisted.getPassword().equals(userDTO.getPassword())) {
 				persisted.setPassword(userDTO.getPassword());
 			}
