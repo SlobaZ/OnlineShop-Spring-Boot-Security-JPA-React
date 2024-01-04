@@ -10,7 +10,6 @@ const ResultShoppingComponent = () => {
     const {id} = useParams();
 
     const[items,setItems] = useState([]);
-    const[user,setUser] = useState('');
     const[shopping,setShopping] = useState('');
 
     let navigate = useNavigate();
@@ -27,7 +26,6 @@ const ResultShoppingComponent = () => {
           ShoppingsService.getShoppingById(id).then((response) => {
                 setShopping(response.data);
           });
-          setUser(AuthenticationService.getCurrentUser());
         }
     }
 
@@ -49,7 +47,7 @@ const ResultShoppingComponent = () => {
             
             <tr>
                 <td>User : </td>
-                <td>{user.username}</td>
+                <td>{shopping.userUsername}</td>
             </tr>
 
             <tr>

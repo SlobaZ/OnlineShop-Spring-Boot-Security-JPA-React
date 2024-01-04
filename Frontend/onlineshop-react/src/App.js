@@ -13,6 +13,7 @@ import "./buttons.css";
 import "./App.css";
 import "./footer.css"; 
 
+import DarkModeService from "./Services/DarkModeService";
 import AuthenticationService from "./Services/AuthenticationService";
 
 import LoginComponent from "./Components/LoginComponent";
@@ -44,30 +45,37 @@ function App() {
 			setCurrentUser(user);
 			setShowAdmin(user.roles.includes("ROLE_ADMIN"));
 		}
+    const mode = DarkModeService.getDarkMode();
+    if(mode==="dark"){
+      DarkModeService.addDarkMode();
+    }
   },[]);
         
-	  const logOut = () => {
+	const logOut = () => {
 		  AuthenticationService.logout();
 		  setCurrentUser(false);
 		  setShowAdmin(false);
 		  window.location.reload();
-		 }
+	}
 		
 
-	   const showNavigation  = (showMenu) => { 
+	  const showNavigation  = (showMenu) => { 
 		    if(showMenu===false){
 		       setShowMenu(true);
 		    }
 		    else{
 		      setShowMenu(false);
 		    }
-		  }
+		}
 		
 		
 		const updateDimensions = () => {
 		  	 setScreenWidth(window.innerWidth);
-		  }
+		}
 		
+    const addDarkMode = () => {
+        DarkModeService.setDarkMode();
+    }
 			      
 
 
@@ -144,9 +152,12 @@ function App() {
         </div>
 
         <div className="footer">
-        <div className="footerText">
-            <p className="text-center">Restaurant Spring Boot Security JPA React</p>
-        </div>
+          <div className="footerText">
+              <p className="text-center">OnlineShop Spring Boot Security JPA React</p>
+          </div>
+          <div className="footerMode">
+              <button className="btn btn-mode" onClick={ () => addDarkMode()}> Mode </button>
+          </div>
         </div>
         
 

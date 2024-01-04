@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import {useParams, useNavigate } from 'react-router-dom';
 import ShoppingsService from '../../Services/ShoppingsService';
 import UsersService from '../../Services/UsersService';
@@ -12,13 +12,17 @@ const AddOrEditShoppingComponent = () => {
 	const[userId,setUserId] = useState('');
 	const[code,setCode] = useState('');
     const[totalPrice,setTotalPrice] = useState('');
-    const[dateTime,setDateTime] = useState('');
+    const[calendarData,setCalendarData] = useState('');
     
     const [message, setMessage] = useState("");
 	const [messageCode, setMessageCode] = useState("");
 	const [messageTotalPrice, setMessageTotalPrice] = useState("");
 	const [messageDateTime, setMessageDateTime] = useState("");
-	const [messageUserId, setMessageUserId] = useState("");		
+	const [messageUserId, setMessageUserId] = useState("");	
+	
+	const dateTime = useMemo(() => {
+        return formatDateTimeToString(calendarData);
+    }, [calendarData]);	
 
     let navigate = useNavigate();
 
@@ -34,7 +38,7 @@ const AddOrEditShoppingComponent = () => {
     }
 
     const changeDatetimeHandler = (event) => {
-        setDateTime(event.target.value);
+        setCalendarData(event.target.value);
         setMessageDateTime("");
     }
     
@@ -73,7 +77,7 @@ const AddOrEditShoppingComponent = () => {
         }else{
             return <div className = "form-group-sm">
                         <label> Date and Time: </label>
-                        <input placeholder="DateTime" name="dateTime" className="form-control"  value={dateTime} onChange={changeDatetimeHandler}/>
+                        <input type="datetime-local"  className="form-control"  value={calendarData} onChange={changeDatetimeHandler}/>
                         		{messageDateTime && (
 							          <p className="messageP" > {messageDateTime} ! </p>
 							    )}
@@ -89,13 +93,33 @@ const AddOrEditShoppingComponent = () => {
 			if(totalPrice === '' || totalPrice<=0){
 					setMessageTotalPrice("The Total Price field must be greater than zero");
 			}
-			if(dateTime.trim().length === 0){
+			if(calendarData.trim().length === 0){
 					setMessageDateTime("The Date & Time field must not be empty");
 			}
 			if(userId === ''){
 					setMessageUserId("The User field must not be empty");
 			}
 	}
+	
+	function formatDateTimeToString  (value)  {
+        const enteredValue = value;
+        const day = enteredValue.substring(8, 10);
+        const month = enteredValue.substring(5, 7);
+        const year = enteredValue.substring(0, 4);
+        const time = enteredValue.substring(11, 16);
+        const formatedValue = day.concat(".", month, ".", year, ". ", time);
+        return formatedValue;
+    }
+
+    function formatStringToDateTime  (value)  {
+        const enteredValue = value;
+        const day = enteredValue.substring(0, 2);
+        const month = enteredValue.substring(3, 5);
+        const year = enteredValue.substring(6, 10);
+        const time = enteredValue.substring(12, 17);
+        const formatedValue = year.concat("-", month, "-", day, "T", time);
+        return formatedValue;
+    }
 
     const saveOrUpdateShopping = (e) => {
         e.preventDefault();
@@ -104,7 +128,7 @@ const AddOrEditShoppingComponent = () => {
 		
 		checkFields();
 		
-		if(code && totalPrice>0 && dateTime && userId) {
+		if(code && totalPrice>0 && calendarData && userId) {
 		        if(id === '_add'){
 		            ShoppingsService.createShopping(shopping).then(response =>{
 		                navigate('/shoppings');
@@ -142,7 +166,7 @@ const AddOrEditShoppingComponent = () => {
             ShoppingsService.getShoppingById(id).then( (response) =>{
 			    setCode(response.data.code);
 				setTotalPrice(response.data.totalPrice);
-				setDateTime(response.data.dateTime);
+				setCalendarData(formatStringToDateTime(response.data.dateTime));
 				setUserId(response.data.userId);
             });
         }  

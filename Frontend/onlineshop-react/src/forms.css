@@ -38,7 +38,7 @@
 }
 
 .nextBoxDiv {
-    width:16.6%;
+    width:18%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -64,15 +64,25 @@
 	color: var(--colorFont);
 	border: 1px solid gray;
     box-shadow: 2px 1px #ccc;
+    font-size:0.9vw;
 }
 
-input {
-    font-size:1.0vw;
+input[type="datetime-local"] {
+  cursor: pointer;
+  position: relative;
+  text-align: right;
+  padding-right: 15px;  
 }
 
-input::placeholder {
-    font-size:1.0vw;
+input[type="datetime-local"]::-webkit-calendar-picker-indicator  {
+  cursor: pointer;
+  position: absolute;
+  left: 5px;
+  height:90%;
+  width:auto;
+  content: url(calendar-icon.png);
 }
+
 
 .nextBoxDiv .selectForList {
 	margin-left:2%;
@@ -85,11 +95,11 @@ input::placeholder {
 	border: 1px solid gray;
     box-shadow: 2px 1px #ccc;
     text-align:center;
-    font-size:1.0vw;
+    font-size:0.9vw;
 }
 
 .nextBoxDivButon {
-    width:10%;
+    width:9%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -118,6 +128,11 @@ input::placeholder {
 .boxes:hover {
     box-shadow: var(--boxshadow);
     transform: translateY(2px);
+}
+.boxes input, .boxes input::placeholder, .boxes input:focus {
+	font-size: 0.9vw;
+    color: var(--colorFont);
+    background-color: var(--backgroundColor);
 }
 
 .createupdateP {
@@ -156,15 +171,9 @@ input::placeholder {
         justify-content: flex-end;
         margin-left:auto;
         margin-right: 1%;
+        font-size:4.5vw;
+        
     }
-    
-    input {
-    font-size:4.5vw;
-	}
-	
-	input::placeholder {
-	    font-size:4.5vw;
-	}
     
     .nextBoxDiv .selectForList {
         justify-content: flex-end;
@@ -183,6 +192,10 @@ input::placeholder {
         margin-left:auto;
         margin-right: 1%;
     }
+    
+    .boxes input, .boxes input::placeholder, .boxes input:focus {
+		font-size:4.5vw;
+	}
 
     .createupdateP {
         font-size: 4.5vw;

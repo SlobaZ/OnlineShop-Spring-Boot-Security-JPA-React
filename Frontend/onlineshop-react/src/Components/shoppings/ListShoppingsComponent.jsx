@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ShoppingsService from '../../Services/ShoppingsService';
 import UsersService from '../../Services/UsersService';
 import AuthenticationService from "../../Services/AuthenticationService";
@@ -50,6 +50,20 @@ const ListShoppingsComponent = () => {
         navigate(`/update-shopping/${id}`, {id});
     }
 
+    const resultShopping = (id) => {
+        navigate(`/resultshopping/${id}` , {id});
+    }
+    
+   function formatDateTime  (value)  {
+        const enteredValue = value;
+        const day = enteredValue.substring(8, 10);
+        const month = enteredValue.substring(5, 7);
+        const year = enteredValue.substring(0, 4);
+        const time = enteredValue.substring(11, 16);
+        const formatedValue = day.concat(".", month, ".", year, ". ", time);
+        return formatedValue;
+    }
+
     const refreshShoppings = () => {
         const user = AuthenticationService.getCurrentUser();
         if (user) {
@@ -67,10 +81,10 @@ const ListShoppingsComponent = () => {
            config.params.totalPrice = searchTotalPrice;
          }
           if (searchDateTimeBeginning !== "") {
-           config.params.dateTimeBeginning = searchDateTimeBeginning;
+           config.params.dateTimeBeginning = formatDateTime(searchDateTimeBeginning);
          }
           if (searchDateTimeEnd !== "") {
-           config.params.dateTimeEnd = searchDateTimeEnd;
+           config.params.dateTimeEnd = formatDateTime(searchDateTimeEnd);
          }
          UsersService.getAll().then((response) => {
                 setUsers(response.data);
@@ -112,13 +126,13 @@ const ListShoppingsComponent = () => {
                         </div>
                         
                         <div className="nextBoxDiv">
-                        <label> Beginning: </label>
-                        <input className="inputForList" type="text" name="searchDateTimeBeginning" placeholder=" Date Time " value={searchDateTimeBeginning} onChange={handleChangeDateTimeBeginning}/> 
+                        <label> Beginning &#10095; </label>
+                        <input className="inputForList" type="datetime-local"  value={searchDateTimeBeginning} onChange={handleChangeDateTimeBeginning}/> 
                         </div>
                         
                         <div className="nextBoxDiv">
-                        <label> End: </label>
-                        <input className="inputForList" type="text" name="searchDateTimeEnd" placeholder=" Date Time " value={searchDateTimeEnd} onChange={handleChangeDateTimeEnd}/> 
+                        <label> End  &#10094; </label>
+                        <input className="inputForList" type="datetime-local"  value={searchDateTimeEnd} onChange={handleChangeDateTimeEnd}/> 
                         </div>
 
                         <div className="nextBoxDivButon">
@@ -148,6 +162,7 @@ const ListShoppingsComponent = () => {
                                 <th> Total Price</th>
                                 <th> Update</th>
                                 <th> Delete</th>
+                                <th> Result</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,7 +177,10 @@ const ListShoppingsComponent = () => {
                                         </td>
                                         <td data-label="Delete">
                                              <button  onClick={ () => deleteShopping(shopping.id)} className="btn btn-delete"> <i className='fas fa-trash-alt'></i> Delete  </button>
-                                         </td>
+                                        </td>
+                                        <td data-label="Result">
+                                             <button  onClick={ () => resultShopping(shopping.id)} className="btn btn-select"> <i class="fa fa-calculator"></i> Result  </button>
+                                        </td>
                                     </tr>
                                 )
                             }

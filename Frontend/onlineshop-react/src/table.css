@@ -66,6 +66,7 @@
 table {
     width: 100%;
     table-layout: auto;
+    color: var(--colorFont);
     background: var(--backgroundColor);
 }
 table:hover {
@@ -115,6 +116,11 @@ tr:hover td {
 table img:hover {
 	border: 2px solid darkslategray;
     border-radius: 5px;
+}
+
+table input, table input::placeholder, table input:focus {
+  color: var(--colorFont);
+  background-color: var(--backgroundColor);
 }
   
 .empty {

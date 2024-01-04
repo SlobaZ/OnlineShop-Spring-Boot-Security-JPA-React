@@ -37,7 +37,16 @@
     border-radius: 50%;
     border: 1px solid gray;
   }
+  .boxcardLoginRegister input, .boxcardLoginRegister input::placeholder, .boxcardLoginRegister input:focus {
+    color: var(--colorFont);
+    background-color: var(--backgroundColor);
+  }
 
+  .jumbotron {
+    border: 1px solid gray;
+    color: var(--colorFont);
+    background-color: var(--backgroundBoxcardColor);
+  }
 
 
 
