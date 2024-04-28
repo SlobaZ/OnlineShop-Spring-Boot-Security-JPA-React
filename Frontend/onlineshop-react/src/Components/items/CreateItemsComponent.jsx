@@ -33,7 +33,7 @@ const CreateItemsComponent = () => {
             <br/>
              <div className="tablemodel">
 
-             <div class="rowModel">
+             <div className="rowModel">
                 <p>Start Shopping</p>
              </div>
 

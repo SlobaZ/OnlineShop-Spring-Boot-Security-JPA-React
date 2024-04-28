@@ -51,31 +51,37 @@ const ListProductsComponent = () => {
     }
 
 	const refreshProducts = () => {
-        const user = AuthenticationService.getCurrentUser();
-	    if (user) {
-	      setShowAdmin(user.roles.includes("ROLE_ADMIN"));
-	    }
-        let config = { params: {} };
-    
-        if (searchName !== "") {
-          config.params.name = searchName;
+        try {
+            const user = AuthenticationService.getCurrentUser();
+            if (user) {
+            setShowAdmin(user.roles.includes("ROLE_ADMIN"));
+            }
+            let config = { params: {} };
+        
+            if (searchName !== "") {
+            config.params.name = searchName;
+            }
+            if (searchBrand !== "") {
+            config.params.brand = searchBrand;
+            }
+            if (searchCategory !== "") {
+                config.params.category = searchCategory;
+            }
+            if (searchPrice !== "") {
+            config.params.price = searchPrice;
+            }
+            ProductsService.getCategories().then((response) => {
+                    setCategories(response.data);
+                    
+            });
+            ProductsService.getProducts(config).then((response) => {
+                    setProducts(response.data);
+            });
         }
-        if (searchBrand !== "") {
-          config.params.brand = searchBrand;
+        catch(error) {
+            console.log(error);
         }
-        if (searchCategory !== "") {
-            config.params.category = searchCategory;
-          }
-        if (searchPrice !== "") {
-          config.params.price = searchPrice;
-        }
-        ProductsService.getCategories().then((response) => {
-				setCategories(response.data);
-          });
-        ProductsService.getProducts(config).then((response) => {
-          		setProducts(response.data);
-        });
-      }
+    }
 
 
     useEffect(() => {
@@ -126,10 +132,10 @@ const ListProductsComponent = () => {
 
         <div className="tablemodel">
                  				
-				  <div class="rowModel">
+				  <div className="rowModel">
                       <p>Products List</p>
                       {showAdmin && (
-                        <button className="btn btn-add" onClick={ addProduct }> <i class='fas fa-plus'></i> Add Product </button>
+                        <button className="btn btn-add" onClick={ addProduct }> <i className='fas fa-plus'></i> Add Product </button>
                         )}
                   </div>
 

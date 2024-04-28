@@ -129,11 +129,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator  {
     box-shadow: var(--boxshadow);
     transform: translateY(2px);
 }
-.boxes input, .boxes input::placeholder, .boxes input:focus {
+
+.boxes input, .boxes input::placeholder, .boxes input:focus, .boxes select, .boxes select::placeholder, .boxes select:focus {
 	font-size: 0.9vw;
     color: var(--colorFont);
     background-color: var(--backgroundColor);
 }
+
 
 .createupdateP {
 	font-size:1.1vw;
@@ -142,6 +144,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator  {
 .form-group-sm {
 	margin-top:15px;
 }
+
 
 .messageP {
 	font-size:0.9vw;

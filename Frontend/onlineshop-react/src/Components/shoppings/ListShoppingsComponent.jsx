@@ -149,7 +149,7 @@ const ListShoppingsComponent = () => {
              {showAdmin && (
             <div className="tablemodel">
                  				
-                     <div class="rowModel">
+                     <div className="rowModel">
                          <p>Shoppings List</p>
                      </div>
                     <table>
@@ -179,7 +179,7 @@ const ListShoppingsComponent = () => {
                                              <button  onClick={ () => deleteShopping(shopping.id)} className="btn btn-delete"> <i className='fas fa-trash-alt'></i> Delete  </button>
                                         </td>
                                         <td data-label="Result">
-                                             <button  onClick={ () => resultShopping(shopping.id)} className="btn btn-select"> <i class="fa fa-calculator"></i> Result  </button>
+                                             <button  onClick={ () => resultShopping(shopping.id)} className="btn btn-select"> <i className="fa fa-calculator"></i> Result  </button>
                                         </td>
                                     </tr>
                                 )

@@ -193,7 +193,7 @@ const AddOrEditShoppingComponent = () => {
                                     { getDatetime() }
                                     <div className = "form-group-sm">
                                         <label> User: </label>
-                                        <select name="userId" className="form-control"value={userId} onChange={changeUserIdHandler}> 
+                                        <select name="userId" className="form-control" value={userId} onChange={changeUserIdHandler}> 
                                         <option value={''}> --- Choose ---</option>  
                                         {users.map(user => (
                                         <option value={user.id}>{user.username}</option> ))}

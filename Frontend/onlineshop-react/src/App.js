@@ -1,6 +1,5 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import './App.css';
 import { Routes, Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -32,24 +31,11 @@ import AddOrEditUserComponent from "./Components/users/AddOrEditUserComponent.js
 function App() {
 
 	const[showMenu, setShowMenu] = useState(false);
-	const[screenWidth, setScreenWidth] = useState(0);
+	const[screenWidth, setScreenWidth] = useState();
 	const[currentUser,setCurrentUser] = useState(undefined);
 	const[showAdmin,setShowAdmin] = useState(false);
 	
 
-	useEffect(() => {
-		window.addEventListener('resize' , updateDimensions());
-		setScreenWidth(window.innerWidth);	
-    const user = AuthenticationService.getCurrentUser();
-		if (user) {
-			setCurrentUser(user);
-			setShowAdmin(user.roles.includes("ROLE_ADMIN"));
-		}
-    const mode = DarkModeService.getDarkMode();
-    if(mode==="dark"){
-      DarkModeService.addDarkMode();
-    }
-  },[]);
         
 	const logOut = () => {
 		  AuthenticationService.logout();
@@ -69,14 +55,29 @@ function App() {
 		}
 		
 		
-		const updateDimensions = () => {
-		  	 setScreenWidth(window.innerWidth);
-		}
+	const updateDimensions = () => {
+		  setScreenWidth(window.innerWidth);
+	}
 		
     const addDarkMode = () => {
         DarkModeService.setDarkMode();
     }
-			      
+		
+			
+	useEffect(() => {
+		
+	window.addEventListener('resize' , updateDimensions);
+	
+    const user = AuthenticationService.getCurrentUser();
+	if (user) {
+		setCurrentUser(user);
+		setShowAdmin(user.roles.includes("ROLE_ADMIN"));
+	}
+    const mode = DarkModeService.getDarkMode();
+    if(mode==="dark"){
+      DarkModeService.addDarkMode();
+    }
+  },[]);      
 
 
 	return (
@@ -84,49 +85,49 @@ function App() {
       
       <div className="header">   
 
-      <div className="headerLogo">
-          <div className="headerLogoDiv">
+      <div className="header-logo">
               <img src={logo} alt="Logo" />
-          </div>
       </div>
 
-      <div className="headerText">
-          <div className="headerTextDiv">
-              <h1> <i class='fas fa-globe'></i> OnlineShop </h1>
-          </div>
+      <div className="header-text">
+              <h1> <i className='fas fa-globe'></i> OnlineShop </h1>
       </div>
+      
+      <div  id="active"><p onClick={ () => showNavigation(showMenu)}>  <i className="fa fa-bars"></i> </p></div>
 
 
     <div className="navbar">
-      <div  id="active"><p onClick={ () => showNavigation(showMenu)}> MENU <i className="fa fa-bars"></i> </p></div>
-		    { (showMenu || screenWidth > 767) && (
+      
+		{ (showMenu || window.innerWidth > 767 || screenWidth > 767 ) && (
+			
         <div className="menu">
         
-        <div className="item"><p><Link to={"/products"}> <i class="fa fa-cubes"></i> Products </Link></p></div> 
+        <div className="item"><p><Link to={"/products"}> <i className="fa fa-cubes"></i> Products </Link></p></div> 
         
-        <div className="item"><p><Link to={"/buy"}> <i class="fa fa-shopping-basket"></i> Buy </Link></p></div> 
+        <div className="item"><p><Link to={"/buy"}> <i className="fa fa-shopping-basket"></i> Buy </Link></p></div> 
 
         { showAdmin &&  (
-        <div className="item"><p><Link to={"/shoppings"}> <i class="fa fa-cart-arrow-down"></i> Shoppings </Link></p></div>
+        <div className="item"><p><Link to={"/shoppings"}> <i className="fa fa-cart-arrow-down"></i> Shoppings </Link></p></div>
         )}
 
         { showAdmin &&  (
-        <div className="item"><p><Link to={"/users"}> <i class='fa fa-users'></i> Users </Link></p></div>
+        <div className="item"><p><Link to={"/users"}> <i className='fa fa-users'></i> Users </Link></p></div>
         )}
         
         {currentUser ? (
         <div className="itemX">
-        <p><Link to={"/profile"}> <i class='fas fa-user-alt'></i> {currentUser.username} </Link></p>
-        <p onClick={logOut}><Link to={"/"}> <i class="fas fa-sign-out-alt"></i> LogOut </Link></p>
+        <p><Link to={"/profile"}> <i className='fas fa-user-alt'></i> {currentUser.username} </Link></p>
+        <p onClick={logOut}><Link to={"/"}> <i className="fas fa-sign-out-alt"></i> LogOut </Link></p>
         </div>
         ) : (
         <div className="itemX">
-        <p><Link to={"/login"}> <i class="fas fa-sign-in-alt"></i> Login </Link></p>
-        <p><Link to={"/register"}> <i class="fa fa-edit"></i> Sign Up </Link></p>
+        <p><Link to={"/login"}> <i className="fas fa-sign-in-alt"></i> Login </Link></p>
+        <p><Link to={"/register"}> <i className="fa fa-edit"></i> Sign Up </Link></p>
         </div>
         )}
         </div>
-		  )}
+        
+		 )}
     </div>
 	
     </div>  
@@ -152,10 +153,10 @@ function App() {
         </div>
 
         <div className="footer">
-          <div className="footerText">
+          <div className="footer-text">
               <p className="text-center">OnlineShop Spring Boot Security JPA React</p>
           </div>
-          <div className="footerMode">
+          <div className="footer-mode">
               <button className="btn btn-mode" onClick={ () => addDarkMode()}> Mode </button>
           </div>
         </div>

@@ -77,7 +77,7 @@ const ListItemsComponent = () => {
               <form>   
               <div className="tablemodel">
                  				
-                    <div class="rowModel">
+                    <div className="rowModel">
                         <p>Items List</p>
                     </div>
 
