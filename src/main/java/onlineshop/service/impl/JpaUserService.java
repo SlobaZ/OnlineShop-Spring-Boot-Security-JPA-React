@@ -29,7 +29,7 @@ public class JpaUserService implements UserService {
 	}
 
 	@Override
-	public User getReferenceById(Long id) {
+	public User getReferenceById(Integer id) {
 		return userRepository.getReferenceById(id);
 	}
 
@@ -40,7 +40,7 @@ public class JpaUserService implements UserService {
 
 	@Override
 	public Page<User> findAll(int pageNum) {
-		PageRequest pageable = PageRequest.of(pageNum, 30);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return userRepository.findAll(pageable);
 	}
 
@@ -50,7 +50,7 @@ public class JpaUserService implements UserService {
 	}
 
 	@Override
-	public User delete(Long id) {
+	public User delete(Integer id) {
 		User user = userRepository.getReferenceById(id);
 		if(user != null) {
 			userRepository.delete(user);
@@ -66,7 +66,7 @@ public class JpaUserService implements UserService {
 		if( email != null) {
 			email = '%' + email + '%';
 		}
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return userRepository.search(username, email, pageable);
 	}
 

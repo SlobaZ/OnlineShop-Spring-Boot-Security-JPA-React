@@ -52,7 +52,7 @@ public class JpaShoppingService implements ShoppingService{
 	
 	@Override
 	public Page<Shopping> findAll(int pageNum) {
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return shoppingRepository.findAll(pageable);
 	}
 
@@ -89,7 +89,7 @@ public class JpaShoppingService implements ShoppingService{
 			 endDateTime = AuxiliaryClass.ConvertStringToSqlDateAndTime(dateTimeEnd);
 		}
 	
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return shoppingRepository.search(userId, code, totalPrice, beginDateTime, endDateTime,  pageable);
 	}
 	

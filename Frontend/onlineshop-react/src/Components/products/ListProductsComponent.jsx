@@ -7,6 +7,12 @@ import AuthenticationService from "../../Services/AuthenticationService";
 const ListProductsComponent = () => {
 
     let navigate = useNavigate();
+
+    let[pageNum,setPageNum] = useState(0);
+
+    let config = { params: {} };
+
+    const user = AuthenticationService.getCurrentUser();
 	
 	const[products,setProducts] = useState([]);
 	const[categories,setCategories] = useState([]);
@@ -18,22 +24,32 @@ const ListProductsComponent = () => {
 	
 	const handleChangeName = (event) => {
         setSearchName(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
 
 	const handleChangeBrand = (event) => {
         setSearchBrand(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
 	const handleChangeCategory = (event) => {
         setSearchCategory(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
 
 	const handleChangePrice = (event) => {
         setSearchPrice(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();  
-        refreshProducts();
+        pageNum=0;
+        setPageNum(pageNum);
+        getProducts();
     }
 
     const addProduct = () => {
@@ -46,46 +62,85 @@ const ListProductsComponent = () => {
 
 	const deleteProduct = (id) => {
         ProductsService.deleteProduct(id).then( response => {
-            refreshProducts();
+            getProducts();
          });
     }
 
-	const refreshProducts = () => {
+	const getProducts = () => {    
+        return new Promise((resolve, reject) => { 
+                if (searchName !== "") {
+                config.params.name = searchName;
+                }
+                if (searchBrand !== "") {
+                config.params.brand = searchBrand;
+                }
+                if (searchCategory !== "") {
+                    config.params.category = searchCategory;
+                }
+                if (searchPrice !== "") {
+                config.params.price = searchPrice;
+                }
+                config.params.pageNum =  pageNum;
+            try {   
+                if(pageNum===0){
+                    resolve(
+                        ProductsService.getProducts(config).then((response) => {
+                            setProducts(response.data);
+                        })
+                    );
+                }
+                else {
+                    resolve(
+                        ProductsService.getProducts(config).then((response) => {
+                                response.data.map((item) =>  {
+                                    setProducts(products => [...products, item]);
+                                })
+                        })
+                    );
+                }
+            } 
+            catch(error) {
+                reject(console.log(error));
+            }
+        });
+    }
+
+    const loadMore =async()=>  {
+        pageNum++;
+        setPageNum(pageNum);
+        await getProducts();
+    }
+    
+     const onScroll =()=> {
+        if(document.documentElement.clientHeight + window.scrollY >=
+            (document.documentElement.scrollHeight || document.documentElement.clientHeight)){
+                setTimeout(() => {
+                    loadMore();
+                }, 1000);
+          }
+    }
+    
+    window.onscroll = function() {onScroll()};
+
+    async function getAll() {
         try {
-            const user = AuthenticationService.getCurrentUser();
-            if (user) {
-            setShowAdmin(user.roles.includes("ROLE_ADMIN"));
-            }
-            let config = { params: {} };
-        
-            if (searchName !== "") {
-            config.params.name = searchName;
-            }
-            if (searchBrand !== "") {
-            config.params.brand = searchBrand;
-            }
-            if (searchCategory !== "") {
-                config.params.category = searchCategory;
-            }
-            if (searchPrice !== "") {
-            config.params.price = searchPrice;
-            }
             ProductsService.getCategories().then((response) => {
-                    setCategories(response.data);
-                    
-            });
-            ProductsService.getProducts(config).then((response) => {
-                    setProducts(response.data);
+                setCategories(response.data);
+                
             });
         }
         catch(error) {
             console.log(error);
         }
+        await getProducts();
     }
 
 
     useEffect(() => {
-		refreshProducts();
+        if (user) {
+            setShowAdmin(user.roles.includes("ROLE_ADMIN"));
+        }
+		getAll();
      },[]);
 
 
@@ -143,6 +198,7 @@ const ListProductsComponent = () => {
 
                             <thead>
                                 <tr>
+                                    <th> ID</th>
                                     <th> Name</th>
                                     <th> Brand</th>
                                     <th> Photo</th>
@@ -156,6 +212,7 @@ const ListProductsComponent = () => {
                             <tbody>
                                 { products.map( product => 
                                         <tr key = {product.id}>
+                                             <td data-label="ID"> {product.id} </td> 
                                              <td data-label="Name"> {product.name} </td>   
                                              <td data-label="Brand"> {product.brand} </td> 
                                              <td data-label="Photo"> <img src={process.env.PUBLIC_URL + '/images/' + product.photo} alt="slika" width="65" height="65" /></td>
@@ -173,6 +230,11 @@ const ListProductsComponent = () => {
                                 }
                             </tbody>
                         </table>
+
+                        <div className="div-load">
+                            <button className="btn btn-submit" onClick={ () =>loadMore()}> <i className="fas fa-sync fa-spin"></i>  Load  more </button> 
+                        </div>
+
 						<div className="empty"></div>
         </div>
 

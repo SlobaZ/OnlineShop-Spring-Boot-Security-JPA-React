@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShoppingsService from '../../Services/ShoppingsService';
 import UsersService from '../../Services/UsersService';
@@ -9,40 +9,59 @@ import AuthenticationService from "../../Services/AuthenticationService";
 const ListShoppingsComponent = () => {
 
     let navigate = useNavigate();
-	
+    
+    let[pageNum,setPageNum] = useState(0);
+
+    const user = AuthenticationService.getCurrentUser();
+
+    let config = { headers:{ Authorization: 'Bearer ' + user.accessToken } , params: {} };
+    	
 	const[shoppings,setShoppings] = useState([]);
 	const[users,setUsers] = useState([]);
-	const[searchUserId,setSearchUserId] = useState('');
-	const[searchCode,setSearchCode] = useState('');
-    const[searchTotalPrice,setSearchTotalPrice] = useState('');
-    const[searchDateTimeBeginning,setSearchDateTimeBeginning] = useState('');
-    const[searchDateTimeEnd,setSearchDateTimeEnd] = useState('');
     const[showAdmin,setShowAdmin] = useState('');
 
+	const[userId,setUserId] = useState('');
+	const[code,setCode] = useState('');
+    const[totalPrice,setTotalPrice] = useState('');
+    const[dateTimeBeginning,setDateTimeBeginning] = useState('');
+    const[dateTimeEnd,setDateTimeEnd] = useState('');
+
     const handleChangeUserId = (event) => {
-        setSearchUserId(event.target.value);
+        setUserId(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
     const handleChangeCode = (event) => {
-        setSearchCode(event.target.value);
+        setCode(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
     const handleChangeTotalPrice = (event) => {
-        setSearchTotalPrice(event.target.value);
+        setTotalPrice(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
     const handleChangeDateTimeBeginning = (event) => {
-        setSearchDateTimeBeginning(event.target.value);
+        setDateTimeBeginning(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
     const handleChangeDateTimeEnd = (event) => {
-        setSearchDateTimeEnd(event.target.value);
+        setDateTimeEnd(event.target.value);
+        pageNum=0;
+        setPageNum(pageNum);
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();  
-        refreshShoppings();
+        pageNum=0;
+        setPageNum(pageNum);
+        getShoppings();
     }
 
     const deleteShopping = (id) => {
         ShoppingsService.deleteShopping(id).then( res => {
-            refreshShoppings();
+            getShoppings();
         });
     }
 
@@ -64,39 +83,96 @@ const ListShoppingsComponent = () => {
         return formatedValue;
     }
 
-    const refreshShoppings = () => {
-        const user = AuthenticationService.getCurrentUser();
+
+    let getShoppings = () => {
+        return new Promise((resolve, reject) => {
+
+            if (userId !== "") {
+                config.params.userId = userId;
+              }
+              if (code !== "") {
+                config.params.code = code;
+              }
+              if (totalPrice !== "") {
+                config.params.totalPrice = totalPrice;
+              }
+               if (dateTimeBeginning !== "") {
+                config.params.dateTimeBeginning = formatDateTime(dateTimeBeginning);
+              }
+               if (dateTimeEnd !== "") {
+                config.params.dateTimeEnd = formatDateTime(dateTimeEnd);
+              }
+                config.params.pageNum =  pageNum;
+
+          try {   
+                if(pageNum===0){
+                    resolve(
+                        ShoppingsService.getShoppings(config).then((response) => {
+                            setShoppings(response.data);
+                        })
+                    );
+                }
+                else {
+                    resolve(
+                        ShoppingsService.getShoppings(config).then((response) => {
+                                response.data.map((item) =>  {
+                                    setShoppings(shoppings => [...shoppings, item]);
+                                })
+                        })
+                    );
+                }
+          }
+          catch (error) {
+              reject(console.log(error));
+          }
+      });
+  }
+
+  const getUsers =()=> {
+    return new Promise((resolve, reject) => {
+      try {
+            resolve(
+                UsersService.getAll().then((response) => {
+                    setUsers(response.data);
+                })
+            );
+      }
+      catch (error) {
+          reject(console.log(error));
+      }
+  });
+}
+
+const loadMore =async()=>  {
+    pageNum++;
+    setPageNum(pageNum);
+    await getShoppings();
+}
+
+ const onScroll =()=> {
+    if(document.documentElement.clientHeight + window.scrollY >=
+        (document.documentElement.scrollHeight || document.documentElement.clientHeight)){
+            setTimeout(() => {
+                loadMore();
+            }, 1000);
+      }
+}
+
+window.onscroll = function() {onScroll()};
+
+async function getAll() {
+        await getUsers();
+        await getShoppings();
+}
+
+useEffect(() => {
         if (user) {
             setShowAdmin(user.roles.includes("ROLE_ADMIN"));
         }
-         let config = { headers:{ Authorization: 'Bearer ' + user.accessToken } , params: {} };
-     
-         if (searchUserId !== "") {
-           config.params.userId = searchUserId;
-         }
-         if (searchCode !== "") {
-           config.params.code = searchCode;
-         }
-         if (searchTotalPrice !== "") {
-           config.params.totalPrice = searchTotalPrice;
-         }
-          if (searchDateTimeBeginning !== "") {
-           config.params.dateTimeBeginning = formatDateTime(searchDateTimeBeginning);
-         }
-          if (searchDateTimeEnd !== "") {
-           config.params.dateTimeEnd = formatDateTime(searchDateTimeEnd);
-         }
-         UsersService.getAll().then((response) => {
-                setUsers(response.data);
-           });
-         ShoppingsService.getShoppings(config).then((response) => {
-                setShoppings(response.data);
-         });
-    }
+		getAll();
+},[]);
 
-    useEffect(() => {
-		refreshShoppings();
-     },[]);
+
 
      return (
         <div>
@@ -108,7 +184,7 @@ const ListShoppingsComponent = () => {
                
                         <div className="nextBoxDiv">
                         <label>  User: </label>
-                        <select className="selectForList" name="searchUserId" value={searchUserId} onChange={handleChangeUserId}> 
+                        <select className="selectForList" name="userId" value={userId} onChange={handleChangeUserId}> 
                                 <option value={''}> --- Select ---</option>  
                                 {users.map(user => (
                                 <option value={user.id}>{user.username}</option> ))}
@@ -117,22 +193,22 @@ const ListShoppingsComponent = () => {
 
                         <div className="nextBoxDiv">
                         <label>  Code: </label>
-                        <input className="inputForList" type="text" name="searchCode" placeholder=" Search by code" value={searchCode} onChange={handleChangeCode}/> 
+                        <input className="inputForList" type="text" name="code" placeholder=" Search by code" value={code} onChange={handleChangeCode}/> 
                         </div>
 
                         <div className="nextBoxDiv">
                         <label> Total Price: </label>
-                        <input className="inputForList" type="number" name="searchTotalPrice"  placeholder=" Search by price" value={searchTotalPrice} onChange={handleChangeTotalPrice}/> 
+                        <input className="inputForList" type="number" name="totalPrice"  placeholder=" Search by price" value={totalPrice} onChange={handleChangeTotalPrice}/> 
                         </div>
                         
                         <div className="nextBoxDiv">
                         <label> Beginning &#10095; </label>
-                        <input className="inputForList" type="datetime-local"  value={searchDateTimeBeginning} onChange={handleChangeDateTimeBeginning}/> 
+                        <input className="inputForList" type="datetime-local"  value={dateTimeBeginning} onChange={handleChangeDateTimeBeginning}/> 
                         </div>
                         
                         <div className="nextBoxDiv">
                         <label> End  &#10094; </label>
-                        <input className="inputForList" type="datetime-local"  value={searchDateTimeEnd} onChange={handleChangeDateTimeEnd}/> 
+                        <input className="inputForList" type="datetime-local"  value={dateTimeEnd} onChange={handleChangeDateTimeEnd}/> 
                         </div>
 
                         <div className="nextBoxDivButon">
@@ -156,6 +232,7 @@ const ListShoppingsComponent = () => {
 
                         <thead>
                             <tr>
+                                <th> O/N </th>
                                 <th> Code</th>
                                 <th> Customer</th>
                                 <th> Date and Time</th>
@@ -166,8 +243,9 @@ const ListShoppingsComponent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            { shoppings.map( shopping => 
+                            { shoppings.map( (shopping, index) => 
                                     <tr key = {shopping.id}>
+                                         <td data-label="O/N"> { index+1 } </td>
                                          <td data-label="Code"> {shopping.code} </td>   
                                          <td data-label="Customer"> {shopping.userUsername} </td>
                                          <td data-label="Date & Time"> {shopping.dateTime}</td>
@@ -186,6 +264,11 @@ const ListShoppingsComponent = () => {
                             }
                         </tbody>
                     </table>
+
+                    <div className="div-load">
+                    <button className="btn btn-submit" onClick={ () =>loadMore()}> <i className="fas fa-sync fa-spin"></i>  Load  more </button> 
+                    </div>
+
                     <div className="empty"></div>
              </div>
             )}

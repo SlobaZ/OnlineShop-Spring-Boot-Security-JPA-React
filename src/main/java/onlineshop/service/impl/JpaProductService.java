@@ -34,7 +34,7 @@ public class JpaProductService implements ProductService{
 
 	@Override
 	public Page<Product> findAll(int pageNum) {
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return productRepository.findAll(pageable);
 	}
 
@@ -67,7 +67,7 @@ public class JpaProductService implements ProductService{
 		if( brand != null) {
 			brand = '%' + brand + '%';
 		}
-		PageRequest pageable = PageRequest.of(pageNum, 20);
+		PageRequest pageable = PageRequest.of(pageNum, 10);
 		return productRepository.search(name, brand, category, price, pageable);
 	}
 
